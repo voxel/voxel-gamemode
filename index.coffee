@@ -30,21 +30,21 @@ class Gamemode
     @game.buttons.down.on 'gamemode', @onDown = () =>
       # TODO: add gamemode event? for plugins to handle instead of us
 
-      inventoryHotbar = @game.plugins.get('voxel-inventory-hotbar')  # TODO: this should change voxel-carry inventory, not the hotbar directlyhhh
+      playerInventory = @game.plugins.get('voxel-carry')?.inventory
       if @mode == 'survival'
         @mode = 'creative';
         @game.plugins.enable('voxel-fly');
         @game.plugins.get('voxel-mine')?.instaMine = true
-        @survivalInventoryArray = inventoryHotbar.inventory.array
-        inventoryHotbar?.inventory.array = creativeInventoryArray
-        inventoryHotbar?.refresh()
+        @survivalInventoryArray = playerInventory.array
+        playerInventory?.array = creativeInventoryArray
+        playerInventory?.changed()
         console.log 'creative mode'
       else
         @mode = 'survival'
         @game.plugins.disable 'voxel-fly'
         @game.plugins.get('voxel-mine')?.instaMine = false
-        inventoryHotbar?.inventory.array = survivalInventoryArray
-        inventoryHotbar?.refresh()
+        playerInventory?.array = survivalInventoryArray
+        playerInventory?.changed()
         console.log 'survival mode'
 
   disable: () ->

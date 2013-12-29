@@ -47,33 +47,33 @@
       }
       survivalInventoryArray = [];
       return this.game.buttons.down.on('gamemode', this.onDown = function() {
-        var inventoryHotbar, _ref2, _ref3;
-        inventoryHotbar = _this.game.plugins.get('voxel-inventory-hotbar');
+        var playerInventory, _ref2, _ref3, _ref4;
+        playerInventory = (_ref2 = _this.game.plugins.get('voxel-carry')) != null ? _ref2.inventory : void 0;
         if (_this.mode === 'survival') {
           _this.mode = 'creative';
           _this.game.plugins.enable('voxel-fly');
-          if ((_ref2 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref2.instaMine = true;
+          if ((_ref3 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref3.instaMine = true;
           }
-          _this.survivalInventoryArray = inventoryHotbar.inventory.array;
-          if (inventoryHotbar != null) {
-            inventoryHotbar.inventory.array = creativeInventoryArray;
+          _this.survivalInventoryArray = playerInventory.array;
+          if (playerInventory != null) {
+            playerInventory.array = creativeInventoryArray;
           }
-          if (inventoryHotbar != null) {
-            inventoryHotbar.refresh();
+          if (playerInventory != null) {
+            playerInventory.changed();
           }
           return console.log('creative mode');
         } else {
           _this.mode = 'survival';
           _this.game.plugins.disable('voxel-fly');
-          if ((_ref3 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref3.instaMine = false;
+          if ((_ref4 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref4.instaMine = false;
           }
-          if (inventoryHotbar != null) {
-            inventoryHotbar.inventory.array = survivalInventoryArray;
+          if (playerInventory != null) {
+            playerInventory.array = survivalInventoryArray;
           }
-          if (inventoryHotbar != null) {
-            inventoryHotbar.refresh();
+          if (playerInventory != null) {
+            playerInventory.changed();
           }
           return console.log('survival mode');
         }
