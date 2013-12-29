@@ -1,5 +1,6 @@
 
-ItemPile = require 'ItemPile'
+ItemPile = require 'itempile'
+Inventory = require 'inventory'
 
 module.exports = (game, opts) ->
   return new Gamemode(game, opts);
@@ -18,14 +19,21 @@ class Gamemode
     @enable();
 
   enable: () ->
-    # one of everything, please..
-    creativeInventoryArray = []
-    registry = @game.plugins?.get('voxel-registry')
-    if registry?
-      for props in registry.blockProps
-        creativeInventoryArray.push(new ItemPile(props.name, Infinity)) if props.name?
+    carry = @game.plugins?.get('voxel-carry')
+    if carry
+      @survivalInventory = new Inventory(carry.inventory.width, carry.inventory.height)
+      @creativeInventory = new Inventory(carry.inventory.width, carry.inventory.height)
 
-    survivalInventoryArray = []
+      registry = @game.plugins?.get('voxel-registry')
+      if registry?
+        # one of everything, please..
+        # TODO: better organization, and will checking here get all registered items everywhere?
+        i = 0
+        for props in registry.blockProps
+          if props.name?
+            @creativeInventory.set(i, (new ItemPile(props.name, Infinity))) 
+            i += 1
+
 
     @game.buttons.down.on 'gamemode', @onDown = () =>
       # TODO: add gamemode event? for plugins to handle instead of us
@@ -35,16 +43,19 @@ class Gamemode
         @mode = 'creative';
         @game.plugins.enable('voxel-fly');
         @game.plugins.get('voxel-mine')?.instaMine = true
-        @survivalInventoryArray = playerInventory.array
-        playerInventory?.array = creativeInventoryArray
-        playerInventory?.changed()
+    
+        playerInventory?.transferTo(@survivalInventory) if @survivalInventory?
+        @creativeInventory?.transferTo(playerInventory) if playerInventory?
+
         console.log 'creative mode'
       else
         @mode = 'survival'
         @game.plugins.disable 'voxel-fly'
         @game.plugins.get('voxel-mine')?.instaMine = false
-        playerInventory?.array = survivalInventoryArray
-        playerInventory?.changed()
+
+        playerInventory?.transferTo(@creativeInventory) if @creativeInventory?
+        @survivalInventory?.transferTo(playerInventory) if playerInventory?
+
         console.log 'survival mode'
 
   disable: () ->
