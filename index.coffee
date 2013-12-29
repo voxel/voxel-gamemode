@@ -24,6 +24,9 @@ class Gamemode
       @survivalInventory = new Inventory(carry.inventory.width, carry.inventory.height)
       @creativeInventory = new Inventory(carry.inventory.width, carry.inventory.height)
 
+    if @game.plugins?.isEnabled('voxel-fly') and @mode == 'survival'
+        @game.plugins.disable('voxel-fly')
+
     @game.buttons.down.on 'gamemode', @onDown = () =>
       # TODO: add gamemode event? for plugins to handle instead of us
 

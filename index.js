@@ -34,21 +34,24 @@
     }
 
     Gamemode.prototype.enable = function() {
-      var carry, _ref,
+      var carry, _ref, _ref1,
         _this = this;
       carry = (_ref = this.game.plugins) != null ? _ref.get('voxel-carry') : void 0;
       if (carry) {
         this.survivalInventory = new Inventory(carry.inventory.width, carry.inventory.height);
         this.creativeInventory = new Inventory(carry.inventory.width, carry.inventory.height);
       }
+      if (((_ref1 = this.game.plugins) != null ? _ref1.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
+        this.game.plugins.disable('voxel-fly');
+      }
       return this.game.buttons.down.on('gamemode', this.onDown = function() {
-        var playerInventory, _ref1, _ref2, _ref3, _ref4, _ref5;
-        playerInventory = (_ref1 = _this.game.plugins.get('voxel-carry')) != null ? _ref1.inventory : void 0;
+        var playerInventory, _ref2, _ref3, _ref4, _ref5, _ref6;
+        playerInventory = (_ref2 = _this.game.plugins.get('voxel-carry')) != null ? _ref2.inventory : void 0;
         if (_this.mode === 'survival') {
           _this.mode = 'creative';
           _this.game.plugins.enable('voxel-fly');
-          if ((_ref2 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref2.instaMine = true;
+          if ((_ref3 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref3.instaMine = true;
           }
           _this.populateCreative();
           if (_this.survivalInventory != null) {
@@ -57,16 +60,16 @@
             }
           }
           if (playerInventory != null) {
-            if ((_ref3 = _this.creativeInventory) != null) {
-              _ref3.transferTo(playerInventory);
+            if ((_ref4 = _this.creativeInventory) != null) {
+              _ref4.transferTo(playerInventory);
             }
           }
           return console.log('creative mode');
         } else {
           _this.mode = 'survival';
           _this.game.plugins.disable('voxel-fly');
-          if ((_ref4 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref4.instaMine = false;
+          if ((_ref5 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref5.instaMine = false;
           }
           if (_this.creativeInventory != null) {
             if (playerInventory != null) {
@@ -74,8 +77,8 @@
             }
           }
           if (playerInventory != null) {
-            if ((_ref5 = _this.survivalInventory) != null) {
-              _ref5.transferTo(playerInventory);
+            if ((_ref6 = _this.survivalInventory) != null) {
+              _ref6.transferTo(playerInventory);
             }
           }
           return console.log('survival mode');
