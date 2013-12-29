@@ -24,17 +24,6 @@ class Gamemode
       @survivalInventory = new Inventory(carry.inventory.width, carry.inventory.height)
       @creativeInventory = new Inventory(carry.inventory.width, carry.inventory.height)
 
-      registry = @game.plugins?.get('voxel-registry')
-      if registry?
-        # one of everything, please..
-        # TODO: better organization, and will checking here get all registered items everywhere?
-        i = 0
-        for props in registry.blockProps
-          if props.name?
-            @creativeInventory.set(i, (new ItemPile(props.name, Infinity))) 
-            i += 1
-
-
     @game.buttons.down.on 'gamemode', @onDown = () =>
       # TODO: add gamemode event? for plugins to handle instead of us
 
@@ -43,7 +32,9 @@ class Gamemode
         @mode = 'creative';
         @game.plugins.enable('voxel-fly');
         @game.plugins.get('voxel-mine')?.instaMine = true
-    
+
+        @populateCreative()   # add all, including new items/blocks (may have registered after our plugin)
+
         playerInventory?.transferTo(@survivalInventory) if @survivalInventory?
         @creativeInventory?.transferTo(playerInventory) if playerInventory?
 
@@ -60,4 +51,26 @@ class Gamemode
 
   disable: () ->
     @game.buttons.down.removeListener 'gamemode', this.onDown
+
+
+  populateCreative: () ->
+    registry = @game.plugins?.get('voxel-registry')
+    if registry?
+      # one of everything, please..
+      # TODO: better organization
+      i = 0
+
+      # items
+      console.log 'itemProps=',registry.itemProps
+      for name, props of registry.itemProps # TODO: fix encapsulation violation
+        console.log i,name
+        @creativeInventory.set i, new ItemPile(name, Infinity)
+        i += 1
+
+      # blocks
+      for props in registry.blockProps # TODO: fix encapsulation violation
+        if props.name?
+          @creativeInventory.set i, new ItemPile(props.name, Infinity)
+          i += 1
+
 

@@ -34,50 +34,39 @@
     }
 
     Gamemode.prototype.enable = function() {
-      var carry, i, props, registry, _i, _len, _ref, _ref1, _ref2,
+      var carry, _ref,
         _this = this;
       carry = (_ref = this.game.plugins) != null ? _ref.get('voxel-carry') : void 0;
       if (carry) {
         this.survivalInventory = new Inventory(carry.inventory.width, carry.inventory.height);
         this.creativeInventory = new Inventory(carry.inventory.width, carry.inventory.height);
-        registry = (_ref1 = this.game.plugins) != null ? _ref1.get('voxel-registry') : void 0;
-        if (registry != null) {
-          i = 0;
-          _ref2 = registry.blockProps;
-          for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-            props = _ref2[_i];
-            if (props.name != null) {
-              this.creativeInventory.set(i, new ItemPile(props.name, Infinity));
-              i += 1;
-            }
-          }
-        }
       }
       return this.game.buttons.down.on('gamemode', this.onDown = function() {
-        var playerInventory, _ref3, _ref4, _ref5, _ref6, _ref7;
-        playerInventory = (_ref3 = _this.game.plugins.get('voxel-carry')) != null ? _ref3.inventory : void 0;
+        var playerInventory, _ref1, _ref2, _ref3, _ref4, _ref5;
+        playerInventory = (_ref1 = _this.game.plugins.get('voxel-carry')) != null ? _ref1.inventory : void 0;
         if (_this.mode === 'survival') {
           _this.mode = 'creative';
           _this.game.plugins.enable('voxel-fly');
-          if ((_ref4 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref4.instaMine = true;
+          if ((_ref2 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref2.instaMine = true;
           }
+          _this.populateCreative();
           if (_this.survivalInventory != null) {
             if (playerInventory != null) {
               playerInventory.transferTo(_this.survivalInventory);
             }
           }
           if (playerInventory != null) {
-            if ((_ref5 = _this.creativeInventory) != null) {
-              _ref5.transferTo(playerInventory);
+            if ((_ref3 = _this.creativeInventory) != null) {
+              _ref3.transferTo(playerInventory);
             }
           }
           return console.log('creative mode');
         } else {
           _this.mode = 'survival';
           _this.game.plugins.disable('voxel-fly');
-          if ((_ref6 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref6.instaMine = false;
+          if ((_ref4 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref4.instaMine = false;
           }
           if (_this.creativeInventory != null) {
             if (playerInventory != null) {
@@ -85,8 +74,8 @@
             }
           }
           if (playerInventory != null) {
-            if ((_ref7 = _this.survivalInventory) != null) {
-              _ref7.transferTo(playerInventory);
+            if ((_ref5 = _this.survivalInventory) != null) {
+              _ref5.transferTo(playerInventory);
             }
           }
           return console.log('survival mode');
@@ -96,6 +85,34 @@
 
     Gamemode.prototype.disable = function() {
       return this.game.buttons.down.removeListener('gamemode', this.onDown);
+    };
+
+    Gamemode.prototype.populateCreative = function() {
+      var i, name, props, registry, _i, _len, _ref, _ref1, _ref2, _results;
+      registry = (_ref = this.game.plugins) != null ? _ref.get('voxel-registry') : void 0;
+      if (registry != null) {
+        i = 0;
+        console.log('itemProps=', registry.itemProps);
+        _ref1 = registry.itemProps;
+        for (name in _ref1) {
+          props = _ref1[name];
+          console.log(i, name);
+          this.creativeInventory.set(i, new ItemPile(name, Infinity));
+          i += 1;
+        }
+        _ref2 = registry.blockProps;
+        _results = [];
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          props = _ref2[_i];
+          if (props.name != null) {
+            this.creativeInventory.set(i, new ItemPile(props.name, Infinity));
+            _results.push(i += 1);
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
     };
 
     return Gamemode;
