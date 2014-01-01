@@ -64,9 +64,8 @@ class Gamemode
       i = 0
 
       # items
-      console.log 'itemProps=',registry.itemProps
       for name, props of registry.itemProps # TODO: fix encapsulation violation
-        console.log i,name
+        #console.log i,name
         @creativeInventory.set i, new ItemPile(name, Infinity)
         i += 1
 

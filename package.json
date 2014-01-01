@@ -7,10 +7,15 @@
     "url": "git@github.com:deathcap/voxel-gamemode.git"
   },
   "dependencies": {
-    "itempile": "git://github.com/deathcap/itempile.git",
-    "inventory": "git://github.com/deathcap/inventory.git"
+    "itempile": "~0.1.1",
+    "inventory": "~0.1.0"
   },
   "peerDependencies": {
-    "voxel-engine": ">=0.19.0"
-  }
+    "voxel-plugins": ">=0.1.0",
+    "voxel-mine": ">=0.1.0",
+    "voxel-carry": ">=0.1.0",
+    "voxel-fly": "git://github.com/deathcap/voxel-fly.git",
+    "voxel-registry": ">=0.1.0"
+  },
+  "license": "MIT"
 }

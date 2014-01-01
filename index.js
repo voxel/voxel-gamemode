@@ -95,11 +95,9 @@
       registry = (_ref = this.game.plugins) != null ? _ref.get('voxel-registry') : void 0;
       if (registry != null) {
         i = 0;
-        console.log('itemProps=', registry.itemProps);
         _ref1 = registry.itemProps;
         for (name in _ref1) {
           props = _ref1[name];
-          console.log(i, name);
           this.creativeInventory.set(i, new ItemPile(name, Infinity));
           i += 1;
         }
