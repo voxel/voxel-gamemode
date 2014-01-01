@@ -14,7 +14,6 @@
     "voxel-plugins": ">=0.1.0",
     "voxel-mine": ">=0.1.0",
     "voxel-carry": ">=0.1.0",
-    "voxel-fly": "git://github.com/deathcap/voxel-fly.git",
     "voxel-registry": ">=0.1.0"
   },
   "license": "MIT"
