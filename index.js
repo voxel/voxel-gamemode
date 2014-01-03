@@ -11,7 +11,7 @@
   };
 
   module.exports.pluginInfo = {
-    loadAfter: ['voxel-mine', 'voxel-carry', 'voxel-fly', 'voxel-registry']
+    loadAfter: ['voxel-mine', 'voxel-carry', 'voxel-fly', 'voxel-registry', 'voxel-harvest']
   };
 
   Gamemode = (function() {
@@ -45,13 +45,16 @@
         this.game.plugins.disable('voxel-fly');
       }
       return this.game.buttons.down.on('gamemode', this.onDown = function() {
-        var playerInventory, _ref2, _ref3, _ref4, _ref5, _ref6;
+        var playerInventory, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
         playerInventory = (_ref2 = _this.game.plugins.get('voxel-carry')) != null ? _ref2.inventory : void 0;
         if (_this.mode === 'survival') {
           _this.mode = 'creative';
           _this.game.plugins.enable('voxel-fly');
           if ((_ref3 = _this.game.plugins.get('voxel-mine')) != null) {
             _ref3.instaMine = true;
+          }
+          if ((_ref4 = _this.game.plugins.get('voxel-harvest')) != null) {
+            _ref4.enableToolDamage = false;
           }
           _this.populateCreative();
           if (_this.survivalInventory != null) {
@@ -60,16 +63,19 @@
             }
           }
           if (playerInventory != null) {
-            if ((_ref4 = _this.creativeInventory) != null) {
-              _ref4.transferTo(playerInventory);
+            if ((_ref5 = _this.creativeInventory) != null) {
+              _ref5.transferTo(playerInventory);
             }
           }
           return console.log('creative mode');
         } else {
           _this.mode = 'survival';
           _this.game.plugins.disable('voxel-fly');
-          if ((_ref5 = _this.game.plugins.get('voxel-mine')) != null) {
-            _ref5.instaMine = false;
+          if ((_ref6 = _this.game.plugins.get('voxel-mine')) != null) {
+            _ref6.instaMine = false;
+          }
+          if ((_ref7 = _this.game.plugins.get('voxel-harvest')) != null) {
+            _ref7.enableToolDamage = true;
           }
           if (_this.creativeInventory != null) {
             if (playerInventory != null) {
@@ -77,8 +83,8 @@
             }
           }
           if (playerInventory != null) {
-            if ((_ref6 = _this.survivalInventory) != null) {
-              _ref6.transferTo(playerInventory);
+            if ((_ref8 = _this.survivalInventory) != null) {
+              _ref8.transferTo(playerInventory);
             }
           }
           return console.log('survival mode');

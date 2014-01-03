@@ -14,7 +14,8 @@
     "voxel-plugins": ">=0.1.0",
     "voxel-mine": ">=0.1.0",
     "voxel-carry": ">=0.1.0",
-    "voxel-registry": ">=0.1.0"
+    "voxel-registry": ">=0.1.0",
+    "voxel-harvest": ">=0.1.2"
   },
   "license": "MIT"
 }
