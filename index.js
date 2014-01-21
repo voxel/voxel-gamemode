@@ -18,6 +18,9 @@
     function Gamemode(game, opts) {
       var _ref, _ref1;
       this.game = game;
+      if (!this.game.isClient) {
+        return;
+      }
       if (this.game.buttons.down == null) {
         throw 'voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener';
       }

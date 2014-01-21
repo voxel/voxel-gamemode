@@ -10,6 +10,8 @@ module.exports.pluginInfo =
 
 class Gamemode
   constructor: (@game, opts) ->
+    return if not @game.isClient # TODO
+
     if not @game.buttons.down?
         throw 'voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener'
 
