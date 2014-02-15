@@ -13,10 +13,10 @@ class Gamemode
     return if not @game.isClient # TODO
 
     if not @game.buttons.down?
-        throw 'voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener'
+        throw new Error('voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener')
 
     @mode = opts.startMode ? 'survival'
-    @registry = @game.plugins?.get('voxel-registry') ? throw 'voxel-gamemode requires "voxel-registry" plugin'
+    @registry = @game.plugins?.get('voxel-registry') ? throw new Error('voxel-gamemode requires "voxel-registry" plugin')
 
     @enable();
 

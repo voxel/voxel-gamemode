@@ -22,7 +22,7 @@
         return;
       }
       if (this.game.buttons.down == null) {
-        throw 'voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener';
+        throw new Error('voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener');
       }
       this.mode = (_ref = opts.startMode) != null ? _ref : 'survival';
       this.registry = (function() {
@@ -30,7 +30,7 @@
         if ((_ref1 = (_ref2 = this.game.plugins) != null ? _ref2.get('voxel-registry') : void 0) != null) {
           return _ref1;
         } else {
-          throw 'voxel-gamemode requires "voxel-registry" plugin';
+          throw new Error('voxel-gamemode requires "voxel-registry" plugin');
         }
       }).call(this);
       this.enable();
