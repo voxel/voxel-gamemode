@@ -3,7 +3,7 @@ ItemPile = require 'itempile'
 Inventory = require 'inventory'
 
 module.exports = (game, opts) ->
-  return new Gamemode(game, opts);
+  return new Gamemode(game, opts)
 
 module.exports.pluginInfo =
   loadAfter: ['voxel-mine', 'voxel-carry', 'voxel-fly', 'voxel-registry', 'voxel-harvest']
@@ -18,7 +18,7 @@ class Gamemode
     @mode = opts.startMode ? 'survival'
     @registry = @game.plugins?.get('voxel-registry') ? throw new Error('voxel-gamemode requires "voxel-registry" plugin')
 
-    @enable();
+    @enable()
 
   enable: () ->
     carry = @game.plugins?.get('voxel-carry')
@@ -34,8 +34,8 @@ class Gamemode
 
       playerInventory = @game.plugins.get('voxel-carry')?.inventory
       if @mode == 'survival'
-        @mode = 'creative';
-        @game.plugins.enable('voxel-fly');
+        @mode = 'creative'
+        @game.plugins.enable('voxel-fly')
         @game.plugins.get('voxel-mine')?.instaMine = true
         @game.plugins.get('voxel-harvest')?.enableToolDamage = false
 
