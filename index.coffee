@@ -74,7 +74,7 @@ class Gamemode
         i += 1
 
       # blocks
-      for name, i in registry.blockIndex2Name[1..] # start at 1 to skip air TODO: fix encapsulation violation
+      for name in registry.blockIndex2Name[1..] # start at 1 to skip air TODO: fix encapsulation violation
         @creativeInventory.set i, new ItemPile(name, Infinity)
         i += 1
 

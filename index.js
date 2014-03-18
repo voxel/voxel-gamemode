@@ -113,8 +113,8 @@
         }
         _ref2 = registry.blockIndex2Name.slice(1);
         _results = [];
-        for (i = _i = 0, _len = _ref2.length; _i < _len; i = ++_i) {
-          name = _ref2[i];
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          name = _ref2[_i];
           this.creativeInventory.set(i, new ItemPile(name, Infinity));
           _results.push(i += 1);
         }
