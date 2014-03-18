@@ -111,16 +111,12 @@
           this.creativeInventory.set(i, new ItemPile(name, Infinity));
           i += 1;
         }
-        _ref2 = registry.blockProps;
+        _ref2 = registry.blockIndex2Name.slice(1);
         _results = [];
-        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-          props = _ref2[_i];
-          if (props.name != null) {
-            this.creativeInventory.set(i, new ItemPile(props.name, Infinity));
-            _results.push(i += 1);
-          } else {
-            _results.push(void 0);
-          }
+        for (i = _i = 0, _len = _ref2.length; _i < _len; i = ++_i) {
+          name = _ref2[i];
+          this.creativeInventory.set(i, new ItemPile(name, Infinity));
+          _results.push(i += 1);
         }
         return _results;
       }

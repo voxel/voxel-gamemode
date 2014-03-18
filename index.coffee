@@ -74,9 +74,8 @@ class Gamemode
         i += 1
 
       # blocks
-      for props in registry.blockProps # TODO: fix encapsulation violation
-        if props.name?
-          @creativeInventory.set i, new ItemPile(props.name, Infinity)
-          i += 1
+      for name, i in registry.blockIndex2Name[1..] # start at 1 to skip air TODO: fix encapsulation violation
+        @creativeInventory.set i, new ItemPile(name, Infinity)
+        i += 1
 
 
