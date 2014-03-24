@@ -56,8 +56,16 @@ class Gamemode
 
         console.log 'survival mode'
 
+    @game.buttons.down.on 'inventory', @onInventory = () =>
+      if @mode == 'creative' and @game.plugins.isEnabled('voxel-inventory-creative')
+        @game.plugins.get('voxel-inventory-creative')?.open()
+      else
+        @game.plugins.get('voxel-inventory-crafting')?.open()
+
+
   disable: () ->
-    @game.buttons.down.removeListener 'gamemode', this.onDown
+    @game.buttons.down.removeListener 'gamemode', @onDown
+    @game.buttons.down.removeListener 'inventory', @onInventory
 
 
   populateCreative: () ->

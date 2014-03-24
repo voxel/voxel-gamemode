@@ -46,7 +46,7 @@
       if (((_ref1 = this.game.plugins) != null ? _ref1.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
         this.game.plugins.disable('voxel-fly');
       }
-      return this.game.buttons.down.on('gamemode', this.onDown = (function(_this) {
+      this.game.buttons.down.on('gamemode', this.onDown = (function(_this) {
         return function() {
           var playerInventory, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
           playerInventory = (_ref2 = _this.game.plugins.get('voxel-carry')) != null ? _ref2.inventory : void 0;
@@ -94,10 +94,21 @@
           }
         };
       })(this));
+      return this.game.buttons.down.on('inventory', this.onInventory = (function(_this) {
+        return function() {
+          var _ref2, _ref3;
+          if (_this.mode === 'creative' && _this.game.plugins.isEnabled('voxel-inventory-creative')) {
+            return (_ref2 = _this.game.plugins.get('voxel-inventory-creative')) != null ? _ref2.open() : void 0;
+          } else {
+            return (_ref3 = _this.game.plugins.get('voxel-inventory-crafting')) != null ? _ref3.open() : void 0;
+          }
+        };
+      })(this));
     };
 
     Gamemode.prototype.disable = function() {
-      return this.game.buttons.down.removeListener('gamemode', this.onDown);
+      this.game.buttons.down.removeListener('gamemode', this.onDown);
+      return this.game.buttons.down.removeListener('inventory', this.onInventory);
     };
 
     Gamemode.prototype.populateCreative = function() {
