@@ -11,7 +11,7 @@
   };
 
   module.exports.pluginInfo = {
-    loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest']
+    loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands']
   };
 
   Gamemode = (function() {
@@ -37,50 +37,61 @@
     }
 
     Gamemode.prototype.enable = function() {
-      var _ref;
-      if (((_ref = this.game.plugins) != null ? _ref.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
+      var _ref, _ref1, _ref2, _ref3, _ref4;
+      if ((_ref = this.game.plugins) != null) {
+        if ((_ref1 = _ref.get('voxel-commands')) != null) {
+          _ref1.registerCommand('creative', this.enterCreative.bind(this));
+        }
+      }
+      if ((_ref2 = this.game.plugins) != null) {
+        if ((_ref3 = _ref2.get('voxel-commands')) != null) {
+          _ref3.registerCommand('survival', this.enterSurvival.bind(this));
+        }
+      }
+      if (((_ref4 = this.game.plugins) != null ? _ref4.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
         this.game.plugins.disable('voxel-fly');
       }
-      this.game.buttons.down.on('gamemode', this.onDown = (function(_this) {
-        return function() {
-          var _ref1, _ref2, _ref3, _ref4;
-          if (_this.mode === 'survival') {
-            _this.mode = 'creative';
-            _this.game.plugins.enable('voxel-fly');
-            if ((_ref1 = _this.game.plugins.get('voxel-mine')) != null) {
-              _ref1.instaMine = true;
-            }
-            if ((_ref2 = _this.game.plugins.get('voxel-harvest')) != null) {
-              _ref2.enableToolDamage = false;
-            }
-            return console.log('creative mode');
-          } else {
-            _this.mode = 'survival';
-            _this.game.plugins.disable('voxel-fly');
-            if ((_ref3 = _this.game.plugins.get('voxel-mine')) != null) {
-              _ref3.instaMine = false;
-            }
-            if ((_ref4 = _this.game.plugins.get('voxel-harvest')) != null) {
-              _ref4.enableToolDamage = true;
-            }
-            return console.log('survival mode');
-          }
-        };
-      })(this));
       return this.game.buttons.down.on('inventory', this.onInventory = (function(_this) {
         return function() {
-          var _ref1, _ref2;
+          var _ref5, _ref6;
           if (_this.mode === 'creative' && _this.game.plugins.isEnabled('voxel-inventory-creative')) {
-            return (_ref1 = _this.game.plugins.get('voxel-inventory-creative')) != null ? _ref1.open() : void 0;
+            return (_ref5 = _this.game.plugins.get('voxel-inventory-creative')) != null ? _ref5.open() : void 0;
           } else {
-            return (_ref2 = _this.game.plugins.get('voxel-inventory-crafting')) != null ? _ref2.open() : void 0;
+            return (_ref6 = _this.game.plugins.get('voxel-inventory-crafting')) != null ? _ref6.open() : void 0;
           }
         };
       })(this));
     };
 
+    Gamemode.prototype.enterCreative = function() {
+      var _ref, _ref1, _ref2, _ref3;
+      this.mode = 'creative';
+      this.game.plugins.enable('voxel-fly');
+      if ((_ref = this.game.plugins.get('voxel-mine')) != null) {
+        _ref.instaMine = true;
+      }
+      if ((_ref1 = this.game.plugins.get('voxel-harvest')) != null) {
+        _ref1.enableToolDamage = false;
+      }
+      console.log('Entered creative mode');
+      return (_ref2 = this.game.plugins) != null ? (_ref3 = _ref2.get('voxel-console')) != null ? typeof _ref3.log === "function" ? _ref3.log('Entered creative mode') : void 0 : void 0 : void 0;
+    };
+
+    Gamemode.prototype.enterSurvival = function() {
+      var _ref, _ref1, _ref2, _ref3;
+      this.mode = 'survival';
+      this.game.plugins.disable('voxel-fly');
+      if ((_ref = this.game.plugins.get('voxel-mine')) != null) {
+        _ref.instaMine = false;
+      }
+      if ((_ref1 = this.game.plugins.get('voxel-harvest')) != null) {
+        _ref1.enableToolDamage = true;
+      }
+      console.log('Entered survival mode');
+      return (_ref2 = this.game.plugins) != null ? (_ref3 = _ref2.get('voxel-console')) != null ? typeof _ref3.log === "function" ? _ref3.log('Entered survival mode') : void 0 : void 0 : void 0;
+    };
+
     Gamemode.prototype.disable = function() {
-      this.game.buttons.down.removeListener('gamemode', this.onDown);
       return this.game.buttons.down.removeListener('inventory', this.onInventory);
     };
 
