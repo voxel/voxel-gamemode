@@ -40,12 +40,12 @@
       var _ref, _ref1, _ref2, _ref3, _ref4;
       if ((_ref = this.game.plugins) != null) {
         if ((_ref1 = _ref.get('voxel-commands')) != null) {
-          _ref1.registerCommand('creative', this.enterCreative.bind(this));
+          _ref1.registerCommand('creative', this.enterCreative.bind(this), '', 'enters creative mode');
         }
       }
       if ((_ref2 = this.game.plugins) != null) {
         if ((_ref3 = _ref2.get('voxel-commands')) != null) {
-          _ref3.registerCommand('survival', this.enterSurvival.bind(this));
+          _ref3.registerCommand('survival', this.enterSurvival.bind(this), '', 'enters survival mode');
         }
       }
       if (((_ref4 = this.game.plugins) != null ? _ref4.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {

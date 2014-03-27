@@ -21,8 +21,8 @@ class Gamemode
     @enable()
 
   enable: () ->
-    @game.plugins?.get('voxel-commands')?.registerCommand 'creative', @enterCreative.bind(@)
-    @game.plugins?.get('voxel-commands')?.registerCommand 'survival', @enterSurvival.bind(@)
+    @game.plugins?.get('voxel-commands')?.registerCommand 'creative', @enterCreative.bind(@), '', 'enters creative mode'
+    @game.plugins?.get('voxel-commands')?.registerCommand 'survival', @enterSurvival.bind(@), '', 'enters survival mode'
 
     if @game.plugins?.isEnabled('voxel-fly') and @mode == 'survival'
         @game.plugins.disable('voxel-fly')
