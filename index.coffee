@@ -6,14 +6,13 @@ module.exports = (game, opts) ->
   return new Gamemode(game, opts)
 
 module.exports.pluginInfo =
-  loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands']
+  loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands', 'voxel-keys']
 
 class Gamemode
   constructor: (@game, opts) ->
     return if not @game.isClient # TODO
 
-    if not @game.buttons.down?
-        throw new Error('voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener')
+    @keys = @game.plugins.get('voxel-keys') ? throw new Error('voxel-gamemode requires voxel-keys plugin')
 
     @mode = opts.startMode ? 'survival'
     @registry = @game.plugins?.get('voxel-registry') ? throw new Error('voxel-gamemode requires "voxel-registry" plugin')
@@ -27,7 +26,7 @@ class Gamemode
     if @game.plugins?.isEnabled('voxel-fly') and @mode == 'survival'
         @game.plugins.disable('voxel-fly')
 
-    @game.buttons.down.on 'inventory', @onInventory = () =>
+    @keys.down.on 'inventory', @onInventory = () =>
       if @mode == 'creative' and @game.plugins.isEnabled('voxel-inventory-creative')
         @game.plugins.get('voxel-inventory-creative')?.open()
       else
@@ -50,7 +49,7 @@ class Gamemode
     @game.plugins?.get('voxel-console')?.log?('Entered survival mode')
 
   disable: () ->
-    @game.buttons.down.removeListener 'inventory', @onInventory
+    @keys.down.removeListener 'inventory', @onInventory
     # TODO: un-registerCommand
 
 

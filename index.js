@@ -11,24 +11,28 @@
   };
 
   module.exports.pluginInfo = {
-    loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands']
+    loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands', 'voxel-keys']
   };
 
   Gamemode = (function() {
     function Gamemode(game, opts) {
-      var _ref, _ref1;
+      var _ref, _ref1, _ref2;
       this.game = game;
       if (!this.game.isClient) {
         return;
       }
-      if (this.game.buttons.down == null) {
-        throw new Error('voxel-gamemode requires game.buttons as kb-bindings (vs kb-controls), cannot add down event listener');
-      }
-      this.mode = (_ref = opts.startMode) != null ? _ref : 'survival';
+      this.keys = (function() {
+        if ((_ref = this.game.plugins.get('voxel-keys')) != null) {
+          return _ref;
+        } else {
+          throw new Error('voxel-gamemode requires voxel-keys plugin');
+        }
+      }).call(this);
+      this.mode = (_ref1 = opts.startMode) != null ? _ref1 : 'survival';
       this.registry = (function() {
-        var _ref2;
-        if ((_ref1 = (_ref2 = this.game.plugins) != null ? _ref2.get('voxel-registry') : void 0) != null) {
-          return _ref1;
+        var _ref3;
+        if ((_ref2 = (_ref3 = this.game.plugins) != null ? _ref3.get('voxel-registry') : void 0) != null) {
+          return _ref2;
         } else {
           throw new Error('voxel-gamemode requires "voxel-registry" plugin');
         }
@@ -51,7 +55,7 @@
       if (((_ref4 = this.game.plugins) != null ? _ref4.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
         this.game.plugins.disable('voxel-fly');
       }
-      return this.game.buttons.down.on('inventory', this.onInventory = (function(_this) {
+      return this.keys.down.on('inventory', this.onInventory = (function(_this) {
         return function() {
           var _ref5, _ref6;
           if (_this.mode === 'creative' && _this.game.plugins.isEnabled('voxel-inventory-creative')) {
@@ -92,7 +96,7 @@
     };
 
     Gamemode.prototype.disable = function() {
-      return this.game.buttons.down.removeListener('inventory', this.onInventory);
+      return this.keys.down.removeListener('inventory', this.onInventory);
     };
 
     return Gamemode;
