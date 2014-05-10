@@ -55,6 +55,7 @@
       if (((_ref4 = this.game.plugins) != null ? _ref4.isEnabled('voxel-fly') : void 0) && this.mode === 'survival') {
         this.game.plugins.disable('voxel-fly');
       }
+      this.keys.registerKey('inventory', 'E');
       return this.keys.down.on('inventory', this.onInventory = (function(_this) {
         return function() {
           var _ref5, _ref6;
@@ -96,7 +97,8 @@
     };
 
     Gamemode.prototype.disable = function() {
-      return this.keys.down.removeListener('inventory', this.onInventory);
+      this.keys.down.removeListener('inventory', this.onInventory);
+      return this.keys.unregisterKey('inventory');
     };
 
     return Gamemode;

@@ -26,6 +26,7 @@ class Gamemode
     if @game.plugins?.isEnabled('voxel-fly') and @mode == 'survival'
         @game.plugins.disable('voxel-fly')
 
+    @keys.registerKey 'inventory', 'E'
     @keys.down.on 'inventory', @onInventory = () =>
       if @mode == 'creative' and @game.plugins.isEnabled('voxel-inventory-creative')
         @game.plugins.get('voxel-inventory-creative')?.open()
@@ -50,6 +51,7 @@ class Gamemode
 
   disable: () ->
     @keys.down.removeListener 'inventory', @onInventory
+    @keys.unregisterKey 'inventory'
     # TODO: un-registerCommand
 
 
