@@ -2,13 +2,24 @@
   "name": "voxel-gamemode",
   "description": "toggle between creative/survival game modes (voxel.js plugin)",
   "version": "0.2.0",
+  "main": "gamemode.coffee",
   "repository": {
     "type": "git",
     "url": "git@github.com:deathcap/voxel-gamemode.git"
   },
+  "keywords": [
+    "voxel",
+    "plugin",
+    "mode",
+    "creative",
+    "survival"
+  ],
   "dependencies": {
-    "itempile": "~0.2.1",
-    "inventory": "~0.1.1"
+    "itempile": "^0.2.2",
+    "inventory": "^0.1.2"
+  },
+  "browserify": {
+    "transform": [ "coffeeify" ]
   },
   "license": "MIT"
 }
