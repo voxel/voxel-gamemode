@@ -15,8 +15,7 @@
     "survival"
   ],
   "dependencies": {
-    "itempile": "^0.2.2",
-    "inventory": "^0.1.2"
+    "coffeeify": "^1.0.0"
   },
   "browserify": {
     "transform": [

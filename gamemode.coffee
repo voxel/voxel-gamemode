@@ -1,7 +1,4 @@
 
-ItemPile = require 'itempile'
-Inventory = require 'inventory'
-
 module.exports = (game, opts) ->
   return new Gamemode(game, opts)
 
