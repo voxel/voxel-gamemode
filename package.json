@@ -1,7 +1,7 @@
 {
   "name": "voxel-gamemode",
   "description": "toggle between creative/survival game modes (voxel.js plugin)",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "main": "gamemode.js",
   "repository": {
     "type": "git",
