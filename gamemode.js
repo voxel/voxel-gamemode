@@ -1,54 +1,69 @@
+'use strict';
 
-module.exports = (game, opts) ->
-  return new Gamemode(game, opts)
+module.exports = (game, opts) => new GamemodePlugin(game, opts);
 
-module.exports.pluginInfo =
+module.exports.pluginInfo = {
   loadAfter: ['voxel-mine', 'voxel-fly', 'voxel-registry', 'voxel-harvest', 'voxel-commands', 'voxel-keys']
+};
 
-class Gamemode
-  constructor: (@game, opts) ->
-    return if not @game.isClient # TODO
+class GamemodePlugin {
+  constructor(game, opts) {
+    this.game = game;
 
-    @keys = @game.plugins.get('voxel-keys') ? throw new Error('voxel-gamemode requires voxel-keys plugin')
+    this.keys = this.game.plugins.get('voxel-keys');
+    if (!this.keys) throw new Error('voxel-gamemode requires voxel-keys plugin');
 
-    @mode = opts.startMode ? 'survival'
-    @registry = @game.plugins?.get('voxel-registry') ? throw new Error('voxel-gamemode requires "voxel-registry" plugin')
+    this.mode = opts.startMode !== undefined ? opts.startMode : 'survival';
+    this.registry = this.game.plugins.get('voxel-registry');
+    if (!this.registry) throw new Error('voxel-gamemode requires "voxel-registry" plugin');
 
-    @enable()
+    this.enable();
+  }
 
-  enable: () ->
-    @game.plugins?.get('voxel-commands')?.registerCommand 'creative', @enterCreative.bind(@), '', 'enters creative mode'
-    @game.plugins?.get('voxel-commands')?.registerCommand 'survival', @enterSurvival.bind(@), '', 'enters survival mode'
+  enable() {
+    const commandsPlugin = this.game.plugins.get('voxel-commands');
+    if (commandsPlugin) {
+      commandsPlugin.registerCommand('creative', this.enterCreative.bind(this), '', 'enters creative mode');
+      commandsPlugin.registerCommand('survival', this.enterSurvival.bind(this), '', 'enters survival mode');
+    }
 
-    if @game.plugins?.isEnabled('voxel-fly') and @mode == 'survival'
-        @game.plugins.disable('voxel-fly')
+    if (this.game.plugins.isEnabled('voxel-fly') && this.mode == 'survival') {
+        this.game.plugins.disable('voxel-fly');
+    }
 
-    @keys.registerKey 'inventory', 'E'
-    @keys.down.on 'inventory', @onInventory = () =>
-      if @mode == 'creative' and @game.plugins.isEnabled('voxel-inventory-creative')
-        @game.plugins.get('voxel-inventory-creative')?.open()
-      else
-        @game.plugins.get('voxel-inventory-crafting')?.open()
+    this.keys.registerKey('inventory', 'E');
+    this.keys.down.on('inventory', this.onInventory = () => {
+      if (this.mode === 'creative' && this.game.plugins.isEnabled('voxel-inventory-creative')) {
+        const creative = this.game.plugins.get('voxel-inventory-creative');
+        if (creative) creative.open();
+      } else {
+        const crafting = this.game.plugins.get('voxel-inventory-crafting');
+        if (crafting) crafting.open();
+      }
+    });
+  }
 
-  enterCreative: () ->
-    @mode = 'creative'
-    @game.plugins.enable('voxel-fly')
-    @game.plugins.get('voxel-mine')?.instaMine = true
-    @game.plugins.get('voxel-harvest')?.enableToolDamage = false
-    console.log 'Entered creative mode'
-    @game.plugins?.get('voxel-console')?.log?('Entered creative mode')
+  enterCreative() {
+    this.mode = 'creative';
+    this.game.plugins.enable('voxel-fly');
+    if (this.game.plugins.get('voxel-mine')) this.game.plugins.get('voxel-mine').instaMine = true;
+    if (this.game.plugins.get('voxel-harvest')) this.game.plugins.get('voxel-harvest').enableToolDamage = false;
+    console.log('Entered creative mode');
+    if (this.game.plugins.get('voxel-console')) this.game.plugins.get('voxel-console').log('Entered creative mode');
+  }
 
-  enterSurvival: () ->
-    @mode = 'survival'
-    @game.plugins.disable 'voxel-fly'
-    @game.plugins.get('voxel-mine')?.instaMine = false
-    @game.plugins.get('voxel-harvest')?.enableToolDamage = true
-    console.log 'Entered survival mode'
-    @game.plugins?.get('voxel-console')?.log?('Entered survival mode')
+  enterSurvival() {
+    this.mode = 'survival';
+    this.game.plugins.disable('voxel-fly');
+    if (this.game.plugins.get('voxel-mine')) this.game.plugins.get('voxel-mine').instaMine = false;
+    if (this.game.plugins.get('voxel-harvest')) this.game.plugins.get('voxel-harvest').enableToolDamage = true;
+    console.log('Entered survival mode');
+    if (this.game.plugins.get('voxel-console')) this.game.plugins.get('voxel-console').log('Entered survival mode');
+  }
 
-  disable: () ->
-    @keys.down.removeListener 'inventory', @onInventory
-    @keys.unregisterKey 'inventory'
-    # TODO: un-registerCommand
-
-
+  disable() {
+    this.keys.down.removeListener('inventory', this.onInventory);
+    this.keys.unregisterKey('inventory');
+    // TODO: un-registerCommand
+  }
+}

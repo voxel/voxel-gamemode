@@ -14,13 +14,5 @@
     "creative",
     "survival"
   ],
-  "dependencies": {
-    "coffeeify": "^1.0.0"
-  },
-  "browserify": {
-    "transform": [
-      "coffeeify"
-    ]
-  },
   "license": "MIT"
 }
