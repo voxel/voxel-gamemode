@@ -45,7 +45,8 @@ class GamemodePlugin {
 
   enterCreative() {
     this.mode = 'creative';
-    this.game.plugins.enable('voxel-fly');
+    this.game.plugins.enable('voxel-fly'); // old plugin TODO: silently ignore if not present
+    this.game.plugins.enable('voxel-flight');
     if (this.game.plugins.get('voxel-mine')) this.game.plugins.get('voxel-mine').instaMine = true;
     if (this.game.plugins.get('voxel-harvest')) this.game.plugins.get('voxel-harvest').enableToolDamage = false;
     console.log('Entered creative mode');
@@ -55,6 +56,7 @@ class GamemodePlugin {
   enterSurvival() {
     this.mode = 'survival';
     this.game.plugins.disable('voxel-fly');
+    this.game.plugins.disable('voxel-flight');
     if (this.game.plugins.get('voxel-mine')) this.game.plugins.get('voxel-mine').instaMine = false;
     if (this.game.plugins.get('voxel-harvest')) this.game.plugins.get('voxel-harvest').enableToolDamage = true;
     console.log('Entered survival mode');
